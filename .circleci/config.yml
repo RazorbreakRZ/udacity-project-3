@@ -29,6 +29,7 @@ jobs:
           name: Back-end build
           command: |
             cd backend
+            npm login
             npm install
             npm run webpack
       - save_cache:
