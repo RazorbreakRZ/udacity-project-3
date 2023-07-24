@@ -147,6 +147,30 @@ jobs:
       - destroy-environment:
           stack_name: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"  
 
+  configure-infrastructure:
+    docker:
+      - image: cimg/python:3.10
+    steps:
+      - checkout
+      - add_ssh_keys:
+        fingerprints: ["e1:f8:c6:11:23:a3:4b:fe:a2:dd:12:72:96:1a:aa:47"]
+      attach_workspace:
+        at: ~/
+      - run:
+          name: Install dependencies
+          command: |
+            pip install --user ansible
+      - run:
+          name: Configure server
+          command: |
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt configure-server.yml
+      - destroy-environment:
+          stack_name: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
+      - destroy-environment:
+          stack_name: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"  
+
+
 workflows:
   default:
     jobs:
@@ -162,3 +186,5 @@ workflows:
           requires: [build-backend]
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
