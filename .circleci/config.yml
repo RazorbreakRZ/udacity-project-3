@@ -149,7 +149,7 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: cimg/python:3.10
+      - image: amazon/aws-cli:2.13.2
     steps:
       - checkout
       - add_ssh_keys:
