@@ -152,15 +152,15 @@ jobs:
       - image: amazon/aws-cli:2.13.2
     steps:
       - checkout
-      - add_ssh_keys:
-          fingerprints: ["26:41:dc:da:37:b9:84:12:3e:f6:7a:a2:79:d2:4e:ed"]
-      - attach_workspace:
-          at: ~/
       - run:
           name: Install dependencies
           command: |
             yum install -y tar gzip
             pip install --user ansible
+      - attach_workspace:
+          at: ~/
+      - add_ssh_keys:
+          fingerprints: ["26:41:dc:da:37:b9:84:12:3e:f6:7a:a2:79:d2:4e:ed"]
       - run:
           name: Configure server
           command: |
