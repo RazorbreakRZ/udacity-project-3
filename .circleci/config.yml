@@ -159,6 +159,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
+            yum install -y tar gzip
             pip install --user ansible
       - run:
           name: Configure server
