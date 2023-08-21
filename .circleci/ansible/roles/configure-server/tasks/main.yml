@@ -1,0 +1,20 @@
+---
+- name: "APT upgrade"
+  become: true
+  apt:
+    upgrade: "yes"
+
+- name: "NodeJS installation"
+  become: true
+  apt:
+    name: ["nodejs", "npm"]
+    state: latest
+    update_cache: yes
+
+- name: "PM2 installation for production ready NodeJS server"
+  become: true
+  npm:
+    name: pm2
+    global: yes
+    production: yes
+    state: present
