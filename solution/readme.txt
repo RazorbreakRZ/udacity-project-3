@@ -2,4 +2,4 @@
 CloudFront URL: https://dnrcbu9uyeaz1.cloudfront.net/
 Initial S3 Bucket: udapeople-rrz00112233
 RDS URL: database-1.clqtkswmzqqn.us-east-1.rds.amazonaws.com
-KVDB.IO Bucket ID: PJtkQP3vsXnU97L1Cj8kdB
+KVDB.IO Bucket ID: https://kvdb.io/PJtkQP3vsXnU97L1Cj8kdB/
