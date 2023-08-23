@@ -229,7 +229,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            sudo apt-get update && sudo apt-get install -y tar gzip ansible
+            sudo apt-get update && sudo apt-get install -y tar gzip ansible awscli
       - attach_workspace:
           at: ~/
       - run:
@@ -249,6 +249,47 @@ jobs:
       - destroy-environment:
           stack_name: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" 
       # TODO: Revert migration 
+
+  smoke-test:
+    docker:
+      - image: amazon/aws-cli:2.13.2
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            yum install -y curl
+      - run:
+          name: Get backend url
+          command: |
+            export BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
+      - run:
+          name: Backend smoke test.
+          command: |
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}"
+            if curl "${API_URL}/api/status" | grep "ok"
+            then
+              return 0
+            else
+              return 1
+            fi
+      - run:
+          name: Frontend smoke test.
+          command: |
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com"
+            echo $URL
+            if curl -s ${URL} | grep "Welcome"
+            then
+              return 127
+            else
+              return 1
+            fi
+      - destroy-environment:
+          stack_name: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+      - destroy-environment:
+          stack_name: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
+      # TODO: Revert migration
 
 workflows:
   default:
@@ -273,3 +314,5 @@ workflows:
           requires: [run-migrations]
       - deploy-backend:
           requires: [run-migrations]
+      - smoke-test:
+          requires: [deploy-frontend, deploy-backend]
