@@ -188,7 +188,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -274,13 +274,13 @@ jobs:
 
   smoke-test:
     docker:
-      - image: amazon/aws-cli:2.13.2
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - run:
           name: Install dependencies
           command: |
-            yum install -y curl
+            sudo apt-get update && sudo apt-get install -y curl awscli
       - run:
           name: Get backend url
           command: |
