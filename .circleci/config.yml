@@ -250,7 +250,9 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            sudo apt-get update && sudo apt-get install -y tar gzip ansible awscli
+            sudo apt-get update && sudo apt-get install -y awscli tar gzip ansible 
+      - add_ssh_keys:
+          fingerprints: ["26:41:dc:da:37:b9:84:12:3e:f6:7a:a2:79:d2:4e:ed"]
       - attach_workspace:
           at: ~/
       - run:
