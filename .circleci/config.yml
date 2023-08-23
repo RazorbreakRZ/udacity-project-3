@@ -254,7 +254,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update tar gzip ansible aws-cli npm nodejs
+            apk add --update curl tar gzip ansible aws-cli npm nodejs
       - restore_cache:
           keys: [backend-build]
       - add_ssh_keys:
@@ -283,22 +283,22 @@ jobs:
 
   smoke-test:
     docker:
-      - image: python:3.9-alpine3.17
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - run:
           name: Install dependencies
           command: |
-            apk add --update curl tar gzip ansible aws-cli npm nodejs
+            sudo apt-get update && sudo apt-get install -y tar gzip curl awscli python3 ansible nodejs npm
       - run:
           name: Get backend url
           command: |
-            export BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text) >> "$BASH_ENV"
+            export BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
             echo $BACKEND_IP
       - run:
           name: Backend smoke test.
           command: |
-            source "$BASH_ENV"
+            export BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
             if curl "${API_URL}/api/status" | grep "ok"
