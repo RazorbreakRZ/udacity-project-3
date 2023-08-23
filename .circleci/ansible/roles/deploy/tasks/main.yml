@@ -1,9 +1,8 @@
 ---
-- name: "create ~/backend"
-  ansible.builtin.file:
+- name: "create backend directory"
+  file:
     path: ~/backend
     state: directory
-    mode: '0755'
 - name: "uncompress zipped backend on remote"
   unarchive:
     src: artifact.tar.gz
