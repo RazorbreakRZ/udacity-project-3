@@ -224,7 +224,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            sudo apt-get update && sudo apt-get install -y tar awscli
+            sudo apt-get update && sudo apt-get install -y tar awscli curl
       - run:
           name: Get backend url
           command: |
@@ -325,13 +325,13 @@ jobs:
 
   cloudfront-update:
     docker:
-      - image: python:3.9-alpine3.17
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - run:
           name: Install dependencies
           command: |
-            apk add --update aws-cli npm nodejs
+            sudo apt-get update && sudo apt-get install -y tar gzip curl awscli
       - run:
           name: Update cloudfront distribution
           command: |
