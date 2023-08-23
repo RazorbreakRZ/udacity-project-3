@@ -219,6 +219,7 @@ jobs:
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
       - destroy-environment:
           stack_name: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"  
+      # TODO: Revert migration
   
   deploy-backend:
     docker:
@@ -239,12 +240,15 @@ jobs:
             npm run build
             cd ..
             tar -C backend -cvzf artifact.tar.gz .
+            mkdir -p .circleci/ansible/roles/deploy/files/
+            mv artifact.tar.gz .circleci/ansible/roles/deploy/files/
             cd .circleci/ansible
             echo "Content of inventory.txt:"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment:
-          stack_name: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
+          stack_name: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" 
+      # TODO: Revert migration 
 
 workflows:
   default:
