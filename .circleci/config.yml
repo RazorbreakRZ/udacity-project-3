@@ -244,13 +244,16 @@ jobs:
   
   deploy-backend:
     docker:
-      - image: cimg/node:13.8.0
+      - image: python:3.9-alpine3.17
     steps:
       - checkout
       - run:
           name: Install dependencies
           command: |
-            sudo apt-get update && sudo apt-get install -y awscli tar gzip ansible 
+            apk add --update tar gzip ansible aws-cli
+            # sudo apt-get update && sudo apt-get install -y awscli tar gzip ansible 
+      - restore_cache:
+          keys: [backend-build]
       - add_ssh_keys:
           fingerprints: ["26:41:dc:da:37:b9:84:12:3e:f6:7a:a2:79:d2:4e:ed"]
       - attach_workspace:
@@ -258,10 +261,10 @@ jobs:
       - run:
           name: Deploy backend
           command: |
-            cd backend
-            npm i
-            npm run build
-            cd ..
+            # cd backend
+            # npm i
+            # npm run build
+            # cd ..
             tar -C backend -cvzf artifact.tar.gz .
             mkdir -p .circleci/ansible/roles/deploy/files/
             mv artifact.tar.gz .circleci/ansible/roles/deploy/files/
