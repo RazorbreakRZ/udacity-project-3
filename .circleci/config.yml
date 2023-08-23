@@ -266,6 +266,7 @@ jobs:
             cd .circleci/ansible
             echo "Content of inventory.txt:"
             cat inventory.txt
+            ansible-playbook --version
             ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
