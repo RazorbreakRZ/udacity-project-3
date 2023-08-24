@@ -5,6 +5,9 @@ Parameters:
   WorkflowID:
     Description: Unique identifier.
     Type: String
+  OldWorkflowID:
+    Description: Unique identifier.
+    Type: String
 
 
 Resources:
@@ -19,6 +22,7 @@ Resources:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
+        PriceClass: "PriceClass_100"
         Origins:
           - DomainName: !Sub "udapeople-${WorkflowID}.s3.amazonaws.com"
             Id: webpage
@@ -38,3 +42,8 @@ Outputs:
     Description: URL for website hosted on S3
     Export:
       Name: WorkflowID
+  OldWorkflowID:
+    Value: !Sub ${OldWorkflowID}
+    Description: URL of previous CD deployment
+    Export:
+      Name: OldWorkflowID
